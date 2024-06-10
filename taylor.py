@@ -6,6 +6,7 @@ import sympy as sp
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from typing import Callable, Dict
+import tkinter as tk
 
 from graph import show_graph
 from modulos.taylor_module import TaylorSeries
@@ -28,11 +29,16 @@ class Taylor:
         self.canvas_images = self.create_images()
 
         #new
-        self.figure = Figure(figsize=(6, 4), dpi=100)
+        self.figure = Figure(figsize=(5, 4), dpi=100)
         self.figure_canvas = FigureCanvasTkAgg(self.figure, self.root)
 
         # place the canvas on the right side of the window
-        self.figure_canvas.get_tk_widget().place(x=540, y=50)
+        self.figure_canvas.get_tk_widget().place(x=540, y=165)
+
+
+        #text
+        self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7")
+        self.polinomio_label.place(x=440, y=570)
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
@@ -148,6 +154,9 @@ class Taylor:
 
         # draw the graph
         self.figure_canvas.draw()
+
+        # update the polynomial label
+        self.polinomio_label.config(text=str(taylor.P))
 
     def run(self):
         self.root.resizable(False, False)
