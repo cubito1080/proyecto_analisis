@@ -1,6 +1,16 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
+import numpy as np
+import sympy as sp
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+from typing import Callable, Dict
+
+from graph import show_graph
+from modulos.taylor_module import TaylorSeries
+
+
 class Taylor:
     def __init__(self, root: Tk, assets_path: Path):
         self.root = root
@@ -14,6 +24,15 @@ class Taylor:
         self.texts = self.create_texts()
         self.image_label = Label(self.root)  # Label to display the image
         self.polinomio_label = Label(self.root)  # Label to display the generated polynomial
+
+        self.canvas_images = self.create_images()
+
+        #new
+        self.figure = Figure(figsize=(6, 4), dpi=100)
+        self.figure_canvas = FigureCanvasTkAgg(self.figure, self.root)
+
+        # place the canvas on the right side of the window
+        self.figure_canvas.get_tk_widget().place(x=540, y=50)
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
@@ -55,7 +74,7 @@ class Taylor:
             fg="#000716",
             highlightthickness=0
         )
-        entry.place(x=x-width/2, y=y-height/2, width=width, height=height)
+        entry.place(x=x - width / 2, y=y - height / 2, width=width, height=height)
         return entry
 
     def create_entries(self):
@@ -74,6 +93,22 @@ class Taylor:
         self.create_text(138.0, 139.99999999999997, "Ingresa la funcion", "Inter")
         self.create_text(138.0, 376.0, "Ingresa el grado del polinomio:", "Inter")
 
+    def create_image(self, image_file: str, x: float, y: float) -> int:
+        image = self.get_image(image_file)
+        return self.canvas.create_image(x, y, image=image)
+
+
+    def create_images(self) -> Dict[str, int]:
+        images = {
+            "image_1": self.create_image("image_1.png", 1073.0, 725.0),
+            "image_2": self.create_image("image_2.png", 265.74986267089844, 57.0),
+            "image_3": self.create_image("image_3.png", 1047.0, 106.0),
+            "image_4": self.create_image("image_4.png", 107.00000762939453, 73.99999713897705),
+            "image_5": self.create_image("image_5.png", 114.00001525878906, 775.0),
+
+        }
+        return images
+
     def get_image(self, image_file: str) -> PhotoImage:
         if image_file not in self.images:
             self.images[image_file] = PhotoImage(file=self.relative_to_assets(image_file))
@@ -83,16 +118,40 @@ class Taylor:
         return self.assets_path / Path(path)
 
     def on_button_click(self):
-        # This function will be called when the button is clicked
-        # You can add the code to generate the image and the polynomial here
-        pass
+        # get the values from the entries
+        x0 = float(self.entries["entry_1"].get("1.0", "end-1c"))
+        f = self.entries["entry_2"].get("1.0", "end-1c")
+        n = int(self.entries["entry_3"].get("1.0", "end-1c"))
+
+        # parse the function string to a sympy expression
+        x = sp.symbols("x")
+        f = sp.sympify(f)
+
+        # create a TaylorSeries object
+        taylor = TaylorSeries(f, x0, n)
+
+        # clear the current plot
+        self.figure.clear()
+
+        # prepare data
+        P = sp.lambdify(x, taylor.P)
+        F = sp.lambdify(x, f)
+        w = np.linspace(x0 - 5, x0 + 5, 100)
+
+        # create axes
+        axes = self.figure.add_subplot()
+
+        # create the plot
+        axes.plot(w, F(w), label="Function")
+        axes.plot(w, P(w), label=f"Taylor Series (degree {n})")
+        axes.legend()
+
+        # draw the graph
+        self.figure_canvas.draw()
 
     def run(self):
         self.root.resizable(False, False)
         self.root.mainloop()
-
-
-
 
 
 if __name__ == "__main__":

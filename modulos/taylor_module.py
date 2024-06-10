@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import factorial
 
+
 class TaylorSeries:
     def __init__(self, f, x0, n):
         self.f = f
@@ -15,10 +16,10 @@ class TaylorSeries:
 
     def S_taylor(self):
         P = 0
-        for k in range(self.n+1):
+        for k in range(self.n + 1):
             df = sp.diff(self.f, self.x, k)
             dfx0 = df.subs(self.x, self.x0)
-            P += dfx0 * (self.x - self.x0)**k / factorial(k)
+            P += dfx0 * (self.x - self.x0) ** k / factorial(k)
         return P
 
     def evaluate(self, X):
@@ -38,6 +39,7 @@ class TaylorSeries:
         plt.plot(w, P(w), label=f"Taylor Series (degree {self.n})")
         plt.legend()
         plt.show()
+
 
 if __name__ == "__main__":
     x = sp.symbols("x")
