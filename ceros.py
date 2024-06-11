@@ -7,6 +7,8 @@ import numpy as np
 import sympy as sp
 from modulos.ceros_module import biseccion
 from modulos.ceros_module import newton
+from modulos.ceros_module import posicion_falsa
+from modulos.ceros_module import secante
 import tkinter as tk
 
 class Ceros:
@@ -66,8 +68,8 @@ class Ceros:
 
             "biseccion": self.create_button("button_2.png", 590.0, 71.0, 319.0, 128.0, self.handleBiseccion),
             "newton": self.create_button("button_3.png", 590.0, 208.0, 319.0, 128.0, self.handleNewton),
-            "falsa_posicion": self.create_button("button_4.png", 590.0, 345.0, 319.0, 128.0, lambda: print("falsa_posicion clicked")),
-            "secante": self.create_button("button_5.png", 590.0, 482.0, 319.0, 128.0, lambda: print("secante clicked")),
+            "falsa_posicion": self.create_button("button_4.png", 590.0, 345.0, 319.0, 128.0, self.handleFalsaPosicion),
+            "secante": self.create_button("button_5.png", 590.0, 482.0, 319.0, 128.0, self.handleSecante),
         }
         return buttons
 
@@ -215,14 +217,108 @@ class Ceros:
         axes.scatter([root_newton], [F(root_newton)], color='red')
         axes.legend()
 
+        axes.axhline(0, color='black', linewidth=0.5)
+        axes.axvline(0, color='black', linewidth=0.5)
+
         # draw the graph
         self.figure_canvas.draw()
 
+        # update the polynomial label
+        self.solution_label.config(text=str(root_newton))
+
     def handleFalsaPosicion(self):
-        pass
+        # get the values from the entries
+        a_str = self.entries["entry_1"].get("1.0", "end-1c")
+        f_str = self.entries["entry_2"].get("1.0", "end-1c")
+        b_str = self.entries["entry_3"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not a_str or not f_str or not b_str:
+            print("Error: One or more entries are empty")
+            return
+
+        # convert the entries to appropriate types
+        a = float(a_str)
+        b = float(b_str)
+
+        # parse the function string to a sympy expression
+        x = sp.symbols("x")
+        f = sp.sympify(f_str)
+        f_lambda = sp.lambdify(x, f)
+
+        # apply the false position method
+        tol = 1e-3  # tolerance
+        root_falsa_posicion = posicion_falsa(f_lambda, a, b, tol)
+
+        # clear the current plot
+        self.figure.clear()
+
+        # prepare data
+        w = np.linspace(a - 5, a + 5, 100)
+
+        # create axes
+        axes = self.figure.add_subplot()
+
+        # create the plot
+        axes.plot(w, f_lambda(w), label="Function")
+        axes.scatter([root_falsa_posicion], [f_lambda(root_falsa_posicion)], color='red')
+        axes.legend()
+
+        axes.axhline(0, color='black', linewidth=0.5)
+        axes.axvline(0, color='black', linewidth=0.5)
+
+        # draw the graph
+        self.figure_canvas.draw()
+
+        # update the polynomial label
+        self.solution_label.config(text=str(root_falsa_posicion))
 
     def handleSecante(self):
-        pass
+        # get the values from the entries
+        h0_str = self.entries["entry_1"].get("1.0", "end-1c")
+        f_str = self.entries["entry_2"].get("1.0", "end-1c")
+        h1_str = self.entries["entry_3"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not h0_str or not f_str or not h1_str:
+            print("Error: One or more entries are empty")
+            return
+
+        # convert the entries to appropriate types
+        h0 = float(h0_str)
+        h1 = float(h1_str)
+
+        # parse the function string to a sympy expression
+        x = sp.symbols("x")
+        f = sp.sympify(f_str)
+        f_lambda = sp.lambdify(x, f)
+
+        # apply the secant method
+        tol = 1e-6  # tolerance
+        root_secante = secante(f_lambda, h0, h1, tol)
+
+        # clear the current plot
+        self.figure.clear()
+
+        # prepare data
+        w = np.linspace(h0 - 5, h0 + 5, 100)
+
+        # create axes
+        axes = self.figure.add_subplot()
+
+        # create the plot
+        axes.plot(w, f_lambda(w), label="Function")
+        axes.scatter([root_secante], [f_lambda(root_secante)], color='red')
+        axes.legend()
+
+        axes.axhline(0, color='black', linewidth=0.5)
+        axes.axvline(0, color='black', linewidth=0.5)
+
+        # draw the graph
+        self.figure_canvas.draw()
+
+        # update the polynomial label
+        self.solution_label.config(text=str(root_secante))
 
     def run(self):
         self.root.resizable(False, False)

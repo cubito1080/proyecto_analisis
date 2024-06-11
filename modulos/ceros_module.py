@@ -43,6 +43,7 @@ def posicion_falsa(f, a, b, tol):
     return c
 
 
+
 def secante(f, h0, h1, tol):
     h = [h0, h1]
 
@@ -53,6 +54,8 @@ def secante(f, h0, h1, tol):
         print(h[-1])
 
     return h[-1]
+
+
 
 
 def newton(f, x0, tol, variable = None):
@@ -71,3 +74,4 @@ def newton(f, x0, tol, variable = None):
             break
 
     return xv[-1]
+
