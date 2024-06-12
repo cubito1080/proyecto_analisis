@@ -1,3 +1,5 @@
+import numpy as np
+
 # Método de Euler
 def Euler(f, a, b, c0, h):
     n = int((b - a) / h)
@@ -6,8 +8,6 @@ def Euler(f, a, b, c0, h):
     for i in range(n):
         yeu.append(yeu[i] + h * f(t[i], yeu[i])) # reemplazar aqui runge kutta
     return t, yeu
-
-
 
 def runge_kutta_4(f, a, b, c0, h):
     n = int((b - a) / h)
@@ -20,3 +20,5 @@ def runge_kutta_4(f, a, b, c0, h):
         k4 = h * f(t[i] + h, yeu[i] + k3 )
         yeu.append(yeu[i] + ((k1 + 2 * k2 + 2 * k3 + k4))/ 6)
     return t, yeu
+
+

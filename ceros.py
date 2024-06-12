@@ -327,7 +327,7 @@ class Ceros:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\Ceros_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\Ceros_assets")
     root = Tk()
     app = Ceros(root, ASSETS_PATH)
     app.run()

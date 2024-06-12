@@ -165,7 +165,7 @@ class Taylor:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\taylor_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\taylor_assets")
     root = Tk()
     app = Taylor(root, ASSETS_PATH)
     app.run()

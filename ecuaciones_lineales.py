@@ -1,13 +1,15 @@
+import ast
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
 import numpy as np
 
-from modulos.sistema_ecuaciones_module import Gauss_s
+from modulos.sistema_ecuaciones_module import Gauss_s, pivot
 from modulos.sistema_ecuaciones_module import Gauss_s_sumas
 from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
+import tkinter as tk
 
-class App:
+class Ecuaciones_lineales:
     def __init__(self, root: Tk, assets_path: Path):
         self.root = root
         self.assets_path = assets_path
@@ -19,6 +21,10 @@ class App:
         self.entries = self.create_entries()
         self.texts = self.create_texts()
         self.canvas_images = self.create_images()
+
+        # text
+        self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7")
+        self.polinomio_label.place(x=210, y=645)
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
@@ -46,25 +52,17 @@ class App:
         return button
 
     def parseData(self, A_str, b_str):
-        # Eliminar los corchetes exteriores y dividir en filas
-        matriz_string = A_str.strip()
-        matriz_string = matriz_string[1:-1]  # Eliminar el primer y último corchete
-        filas = matriz_string.split('],[')
+        if A_str[0] != '[':
+            A_str = '[' + A_str + ']'
+        A_str = ast.literal_eval(A_str)  # Turn string into a list
+        A = np.array(A_str)  # Turn list into np_array
 
-        # Convertir cada fila en una lista de números
-        matriz_lista = []
-        for fila in filas:
-            elementos = fila.split(',')
-            fila_numerica = [float(elemento) for elemento in elementos]
-            matriz_lista.append(fila_numerica)
+        if b_str[0] != '[':
+            b_str = '[' + b_str + ']'
+        b_str = ast.literal_eval(b_str)  # Turn string into a list
+        b = np.array(b_str)  # Turn list into np_array
 
-        # Convertir la lista de listas en un array de numpy
-        matriz_numpy = np.array(matriz_lista)
-
-        y_data = list(map(float, b_str.split(',')))
-        y_data = np.array(y_data)
-
-        return matriz_numpy, y_data
+        return A, b
 
     def handleEliminacion(self):
         A_str = self.entries["entry_1"].get("1.0", "end-1c")
@@ -77,8 +75,9 @@ class App:
 
         A, b = self.parseData(A_str, b_str)
 
-
         result = eliminacion_gaussiana(A, b)
+
+        self.polinomio_label.config(text=str(result))
 
         print(result)
 
@@ -93,7 +92,9 @@ class App:
 
         A, b = self.parseData(A_str, b_str)
 
-        result = eliminacion_gaussiana(A, b)
+        result = pivot(A, b)
+
+        self.polinomio_label.config(text=str(result))
 
         print(result)
 
@@ -111,6 +112,8 @@ class App:
         tol = 1e-3
         result = Gauss_s(A, b, tol)
 
+        self.polinomio_label.config(text=str(result))
+
         print(result)
 
     def handleGsSumas(self):
@@ -126,6 +129,9 @@ class App:
 
         tol = 1e-3
         result = Gauss_s_sumas(A, b, tol)
+
+        self.polinomio_label.config(text=str(result))
+
 
         print(result)
 
@@ -154,7 +160,7 @@ class App:
         entries = {
             "entry_1": self.create_entry("entry_1.png", 281.0, 289.5, 384.0, 199.0),
             "entry_2": self.create_entry("entry_2.png", 293.5, 523.5, 409.0, 81.0),
-            "entry_3": self.create_entry("entry_3.png", 321.0, 648.5, 202.0, 31.0),
+
         }
         return entries
 
@@ -191,6 +197,9 @@ class App:
     def relative_to_assets(self, path: str) -> Path:
         return self.assets_path / Path(path)
 
+
+
+
     def run(self):
         self.root.resizable(False, False)
         self.root.mainloop()
@@ -200,5 +209,5 @@ if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
     ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\ecuaciones_lineales_assets")
     root = Tk()
-    app = App(root, ASSETS_PATH)
+    app = Ecuaciones_lineales(root, ASSETS_PATH)
     app.run()

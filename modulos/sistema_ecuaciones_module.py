@@ -39,7 +39,7 @@ def Gauss_s(A, b, tolerancia):
   tiempo_final = time.time()
   duracion = tiempo_final - tiempo_inicial
 
-  return xo
+  return xo[-1]
 
 
 # Gauss-Seidel sumatorias
@@ -76,7 +76,7 @@ def Gauss_s_sumas(A, b, tol):
   tiempo_final = time.time()
   duracion = tiempo_final - tiempo_inicial
 
-  return x
+  return x1
 
 
 # Eliminación Gaussiana
@@ -84,10 +84,6 @@ def eliminacion_gaussiana(A, b):
   n = len(b)
 
   for k in range(n-1):
-    # TO DO: Si el pivote es cero cambiarlo al valor mayor en valor absoluto en la misma columna
-    # TODO: Preguntar el TODO de arriba (a wilson)
-    # TODO: Preguntar a Jero que va a preguntar del TODO de arriba
-    # Condicional
     # Línea de intercambio
     for i in range(k+1, n):
       lam = A[i, k] / A[k,k]
@@ -104,5 +100,28 @@ def eliminacion_gaussiana(A, b):
   return x
 
 
-# Pivoteo (es agregar algo en eliminación)
-# Preguntar por este
+def pivot(A, b):
+  n = len(b)
+
+  for k in range(n - 1):
+    # Pivoteo parcial
+    max_index = np.argmax(abs(A[k:n, k])) + k
+    if A[max_index, k] == 0:
+      raise ValueError("Matrix is singular or nearly singular.")
+
+    # Intercambiar filas
+    if max_index != k:
+      A[[k, max_index]] = A[[max_index, k]]
+      b[[k, max_index]] = b[[max_index, k]]
+
+    for i in range(k + 1, n):
+      lam = A[i, k] / A[k, k]
+      A[i, k:n] -= lam * A[k, k:n]
+      b[i] -= lam * b[k]
+
+  x = np.zeros(n)  # Crear un arreglo de n cantidad de ceros
+  # Resolver las variables
+  for k in range(n - 1, -1, -1):
+    x[k] = (b[k] - np.dot(A[k, k + 1:n], x[k + 1:n])) / A[k, k]
+
+  return x

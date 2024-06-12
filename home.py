@@ -1,6 +1,21 @@
-import tkinter as tk
+import ast
 from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
+
+import numpy as np
+
+from ceros import Ceros
+from ecuaciones_diferenciales import Ecuaciones_diferenciales
+from ecuaciones_lineales import Ecuaciones_lineales
+from interpolacion import Interpolacion
+from modulos.sistema_ecuaciones_module import Gauss_s, pivot
+from modulos.sistema_ecuaciones_module import Gauss_s_sumas
+from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
+import tkinter as tk
 from typing import Callable, Dict
+
+from taylor import Taylor
+
 
 class Home:
     def __init__(self, root: tk.Tk, assets_path: Path):
@@ -12,6 +27,14 @@ class Home:
         self.images = {}
         self.buttons = self.create_buttons()
         self.canvas_images = self.create_images()
+        self.interpolacion_object = Interpolacion(root)
+        self.ceros_object = Ceros(root)
+        self.taylor_object = Taylor(root)
+        self.ec_lineales_object = Ecuaciones_lineales(root)
+        self.ec_diferenciales_object = Ecuaciones_diferenciales(root)
+
+
+
 
     def create_canvas(self) -> tk.Canvas:
         canvas = tk.Canvas(
@@ -41,7 +64,7 @@ class Home:
     def create_buttons(self) -> Dict[str, tk.Button]:
         buttons = {
             "button_1": self.create_button("button_1.png", 540.0, 473.0, 387.0, 146.0, lambda: print("button_1 clicked")),
-            "button_2": self.create_button("button_2.png", 540.0, 630.0, 387.0, 146.0, lambda: print("button_2 clicked")),
+            "button_2": self.create_button("button_2.png", 540.0, 630.0, 387.0, 146.0, seri),
             "button_3": self.create_button("button_3.png", 540.0, 7.0, 387.0, 146.0, lambda: print("button_3 clicked")),
             "button_4": self.create_button("button_4.png", 540.0, 161.0, 387.0, 146.0, lambda: print("button_4 clicked")),
             "button_5": self.create_button("button_5.png", 543.0, 317.0, 395.0, 146.0, lambda: print("button_5 clicked")),
@@ -78,7 +101,7 @@ class Home:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\home_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\home_assets")
     root = tk.Tk()
     app = Home(root, ASSETS_PATH)
     app.run()
