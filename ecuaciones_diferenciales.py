@@ -121,7 +121,7 @@ class App:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\ecuaciones_diferenciales_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\ecuaciones_diferenciales_assets")
     root = Tk()
     app = App(root, ASSETS_PATH)
     app.run()

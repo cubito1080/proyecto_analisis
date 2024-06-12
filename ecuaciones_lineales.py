@@ -1,6 +1,12 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
+import numpy as np
+
+from modulos.sistema_ecuaciones_module import Gauss_s
+from modulos.sistema_ecuaciones_module import Gauss_s_sumas
+from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
+
 class App:
     def __init__(self, root: Tk, assets_path: Path):
         self.root = root
@@ -39,12 +45,96 @@ class App:
         button.place(x=x, y=y, width=width, height=height)
         return button
 
+    def parseData(self, A_str, b_str):
+        # Eliminar los corchetes exteriores y dividir en filas
+        matriz_string = A_str.strip()
+        matriz_string = matriz_string[1:-1]  # Eliminar el primer y último corchete
+        filas = matriz_string.split('],[')
+
+        # Convertir cada fila en una lista de números
+        matriz_lista = []
+        for fila in filas:
+            elementos = fila.split(',')
+            fila_numerica = [float(elemento) for elemento in elementos]
+            matriz_lista.append(fila_numerica)
+
+        # Convertir la lista de listas en un array de numpy
+        matriz_numpy = np.array(matriz_lista)
+
+        y_data = list(map(float, b_str.split(',')))
+        y_data = np.array(y_data)
+
+        return matriz_numpy, y_data
+
+    def handleEliminacion(self):
+        A_str = self.entries["entry_1"].get("1.0", "end-1c")
+        b_str = self.entries["entry_2"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not A_str or not b_str:
+            print("Error: One or more entries are empty")
+            return
+
+        A, b = self.parseData(A_str, b_str)
+
+
+        result = eliminacion_gaussiana(A, b)
+
+        print(result)
+
+    def handlePivoteo(self):
+        A_str = self.entries["entry_1"].get("1.0", "end-1c")
+        b_str = self.entries["entry_2"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not A_str or not b_str:
+            print("Error: One or more entries are empty")
+            return
+
+        A, b = self.parseData(A_str, b_str)
+
+        result = eliminacion_gaussiana(A, b)
+
+        print(result)
+
+    def handleGsMatricial(self):
+        A_str = self.entries["entry_1"].get("1.0", "end-1c")
+        b_str = self.entries["entry_2"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not A_str or not b_str:
+            print("Error: One or more entries are empty")
+            return
+
+        A, b = self.parseData(A_str, b_str)
+
+        tol = 1e-3
+        result = Gauss_s(A, b, tol)
+
+        print(result)
+
+    def handleGsSumas(self):
+        A_str = self.entries["entry_1"].get("1.0", "end-1c")
+        b_str = self.entries["entry_2"].get("1.0", "end-1c")
+
+        # check if the entries are empty
+        if not A_str or not b_str:
+            print("Error: One or more entries are empty")
+            return
+
+        A, b = self.parseData(A_str, b_str)
+
+        tol = 1e-3
+        result = Gauss_s_sumas(A, b, tol)
+
+        print(result)
+
     def create_buttons(self):
         buttons = {
-            "button_1": self.create_button("button_1.png", 724.0, 91.0, 247.0, 121.078125, lambda: print("button_1 clicked")),
-            "button_2": self.create_button("button_2.png", 730.0, 217.0, 247.0, 121.078125, lambda: print("button_2 clicked")),
-            "button_3": self.create_button("button_3.png", 730.0, 475.0, 247.0, 121.078125, lambda: print("button_3 clicked")),
-            "button_4": self.create_button("button_4.png", 730.0, 613.0, 247.0, 121.078125, lambda: print("button_4 clicked")),
+            "button_1": self.create_button("button_1.png", 724.0, 91.0, 247.0, 121.078125, self.handleEliminacion),
+            "button_2": self.create_button("button_2.png", 730.0, 217.0, 247.0, 121.078125, self.handlePivoteo),
+            "button_3": self.create_button("button_3.png", 730.0, 475.0, 247.0, 121.078125, self.handleGsMatricial),
+            "button_4": self.create_button("button_4.png", 730.0, 613.0, 247.0, 121.078125, self.handleGsSumas),
         }
         return buttons
 
@@ -108,7 +198,7 @@ class App:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\ecuaciones_lineales_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\ecuaciones_lineales_assets")
     root = Tk()
     app = App(root, ASSETS_PATH)
     app.run()

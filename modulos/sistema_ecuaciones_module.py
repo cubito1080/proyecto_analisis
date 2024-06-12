@@ -39,7 +39,7 @@ def Gauss_s(A, b, tolerancia):
   tiempo_final = time.time()
   duracion = tiempo_final - tiempo_inicial
 
-  return xo, duracion, errores
+  return xo
 
 
 # Gauss-Seidel sumatorias
@@ -76,7 +76,7 @@ def Gauss_s_sumas(A, b, tol):
   tiempo_final = time.time()
   duracion = tiempo_final - tiempo_inicial
 
-  return x, duracion, errores
+  return x
 
 
 # Eliminación Gaussiana
@@ -86,6 +86,7 @@ def eliminacion_gaussiana(A, b):
   for k in range(n-1):
     # TO DO: Si el pivote es cero cambiarlo al valor mayor en valor absoluto en la misma columna
     # TODO: Preguntar el TODO de arriba (a wilson)
+    # TODO: Preguntar a Jero que va a preguntar del TODO de arriba
     # Condicional
     # Línea de intercambio
     for i in range(k+1, n):
