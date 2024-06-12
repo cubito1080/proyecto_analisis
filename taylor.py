@@ -39,6 +39,7 @@ class Taylor:
         #text
         self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7")
         self.polinomio_label.place(x=440, y=570)
+        self.canvas.pack()
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
