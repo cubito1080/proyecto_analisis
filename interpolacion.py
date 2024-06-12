@@ -118,7 +118,8 @@ class Interpolacion:
     def handlePolinomial(self):
         # get the values from the entries
         x_data_str = self.entries["entry_1"].get("1.0", "end-1c")
-        y_data_str = self.entries["entry_2"].get("1.0", "end-1c")
+        y_data_str = self.entries["entry_3"].get("1.0", "end-1c")
+
 
         # check if the entries are empty or end with a comma
         # check if the entries are empty or end with a comma
@@ -130,6 +131,9 @@ class Interpolacion:
         # convert the entries to appropriate types
         x_data = list(map(float, x_data_str.split(',')))
         y_data = list(map(float, y_data_str.split(',')))
+
+        x_data = np.array(x_data)
+        y_data = np.array(y_data)
 
         # apply the polynomial interpolation method
         a_i = Pol_simple_2(x_data, y_data)
@@ -152,18 +156,22 @@ class Interpolacion:
         self.figure_canvas.draw()
 
     def handleMinimos(self):
-        # get the values from the entries
         x_data_str = self.entries["entry_1"].get("1.0", "end-1c")
-        y_data_str = self.entries["entry_2"].get("1.0", "end-1c")
+        y_data_str = self.entries["entry_3"].get("1.0", "end-1c")
 
         # check if the entries are empty or end with a comma
-        if not x_data_str or not y_data_str or x_data_str.endswith(',') or y_data_str.endswith(','):
+        # check if the entries are empty or end with a comma
+        if not x_data_str.strip() or not y_data_str.strip() or x_data_str.strip().endswith(
+                ',') or y_data_str.strip().endswith(','):
             print("Error: Invalid entry")
             return
 
         # convert the entries to appropriate types
         x_data = list(map(float, x_data_str.split(',')))
         y_data = list(map(float, y_data_str.split(',')))
+
+        x_data = np.array(x_data)
+        y_data = np.array(y_data)
 
         # apply the least squares method
         a0, a1 = minimos_cuadrados(np.array(x_data), np.array(y_data))
@@ -186,18 +194,22 @@ class Interpolacion:
         self.figure_canvas.draw()
 
     def handleLagrage(self):
-        # get the values from the entries
         x_data_str = self.entries["entry_1"].get("1.0", "end-1c")
-        y_data_str = self.entries["entry_2"].get("1.0", "end-1c")
+        y_data_str = self.entries["entry_3"].get("1.0", "end-1c")
 
         # check if the entries are empty or end with a comma
-        if not x_data_str or not y_data_str or x_data_str.endswith(',') or y_data_str.endswith(','):
+        # check if the entries are empty or end with a comma
+        if not x_data_str.strip() or not y_data_str.strip() or x_data_str.strip().endswith(
+                ',') or y_data_str.strip().endswith(','):
             print("Error: Invalid entry")
             return
 
         # convert the entries to appropriate types
         x_data = list(map(float, x_data_str.split(',')))
         y_data = list(map(float, y_data_str.split(',')))
+
+        x_data = np.array(x_data)
+        y_data = np.array(y_data)
 
         # construct the Lagrange interpolating polynomial
         P = langrange_polinomio(x_data, y_data)
@@ -232,7 +244,7 @@ class Interpolacion:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Proyecto_final_analisis\build\assets\interpolacion_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\interpolacion_assets")
     root = Tk()
     app = Interpolacion(root, ASSETS_PATH)
     app.run()

@@ -20,7 +20,7 @@ def Pol_simple_2(x_data: Union[np.ndarray, List[float]], y_data: Union[np.ndarra
 
 
 # Convertir a polinomio (polinomial simple)
-def Poly(a_i: List[float], ux: Union[int, float, np.ndarray]) -> Union[int, float, np.ndarray]:
+def Poly(a_i: np.ndarray, ux: Union[int, float, np.ndarray]) -> Union[int, float, np.ndarray]:
     P: Union[int, float, np.ndarray] = 0
     for i in range(len(a_i)):
         P = P + a_i[i] * ux ** i
@@ -30,7 +30,7 @@ def Poly(a_i: List[float], ux: Union[int, float, np.ndarray]) -> Union[int, floa
 # --------
 
 # Lagrange
-def langrange_polinomio(x_d: List[float], y_d: List[float]) -> sp.Expr:
+def langrange_polinomio(x_d: np.ndarray, y_d: np.ndarray) -> sp.Expr:
     x = sp.symbols('x')
     n = len(x_d)
     S = 0
