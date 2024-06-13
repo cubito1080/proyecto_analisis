@@ -14,8 +14,8 @@ from modulos.taylor_module import TaylorSeries
 
 
 class Taylor:
-    def __init__(self):
-        self.root = Tk()
+    def __init__(self, root):
+        self.root = root
         self.assets_path = Path(os.getcwd()) / "assets/taylor_assets"
 
         self.root.geometry("1080x780")

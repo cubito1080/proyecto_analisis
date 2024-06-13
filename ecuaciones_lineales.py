@@ -11,8 +11,8 @@ from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
 import tkinter as tk
 
 class Ecuaciones_lineales:
-    def __init__(self):
-        self.root = Tk()
+    def __init__(self, root):
+        self.root = root
         self.assets_path = Path(os.getcwd()) / "assets/ecuaciones_lineales_assets"
 
 
@@ -50,6 +50,7 @@ class Ecuaciones_lineales:
     def create_button(self, image_file: str, x: float, y: float, width: float, height: float, command) -> Button:
         image = self.get_image(image_file)
         button = Button(
+            self.root,
             image=image,
             borderwidth=0,
             highlightthickness=0,
@@ -169,6 +170,7 @@ class Ecuaciones_lineales:
         image = self.get_image(image_file)
         entry_bg = self.canvas.create_image(x, y, image=image)
         entry = Text(
+            self.root,
             bd=0,
             bg="#FFFFFF",
             fg="#000716",

@@ -11,8 +11,8 @@ from modulos.interpolacion_module import  Poly, Pol_simple_2, minimos_cuadrados,
 
 
 class Interpolacion:
-    def __init__(self):
-        self.root = Tk()
+    def __init__(self, root):
+        self.root = root
         self.assets_path = Path(os.getcwd()) / "assets/interpolacion_assets"
 
 
@@ -54,6 +54,7 @@ class Interpolacion:
     def create_button(self, image_file: str, x: float, y: float, width: float, height: float, command) -> Button:
         image = self.get_image(image_file)
         button = Button(
+            self.root,
             image=image,
             borderwidth=0,
             highlightthickness=0,
@@ -75,6 +76,7 @@ class Interpolacion:
         image = self.get_image(image_file)
         entry_bg = self.canvas.create_image(x, y, image=image)
         entry = Text(
+            self.root,
             bd=0,
             bg="#FFFFFF",
             fg="#000716",

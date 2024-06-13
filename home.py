@@ -19,7 +19,6 @@ from taylor import Taylor
 
 
 class Home:
-    genera_assets_path = r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets"
 
     def __init__(self, root: tk.Tk, assets_path: Path):
         self.root = root
@@ -30,11 +29,6 @@ class Home:
         self.images = {}
         self.buttons = self.create_buttons()
         self.canvas_images = self.create_images()
-        self.interpolacion_object = Interpolacion(root)
-        self.ceros_object = Ceros(root)
-        self.taylor_object = Taylor(root)
-        self.ec_lineales_object = Ecuaciones_lineales(root)
-        self.ec_diferenciales_object = Ecuaciones_diferenciales(root)
 
     def create_canvas(self) -> tk.Canvas:
         canvas = tk.Canvas(
@@ -63,17 +57,17 @@ class Home:
 
     def create_buttons(self) -> Dict[str, tk.Button]:
         buttons = {
-            "button_1": self.create_button("button_1.png", 540.0, 473.0, 387.0, 146.0, lambda: print("button1_clicked")),
-            "button_2": self.create_button("button_2.png", 540.0, 630.0, 387.0, 146.0, lambda: print("button_2 clicked")),
-            "button_3": self.create_button("button_3.png", 540.0, 7.0, 387.0, 146.0, lambda: self.open_new_window(Taylor, "taylor_assets")),
-            "button_4": self.create_button("button_4.png", 540.0, 161.0, 387.0, 146.0, lambda: print("button_4 clicked")),
-            "button_5": self.create_button("button_5.png", 543.0, 317.0, 395.0, 146.0, lambda: print("button_5 clicked")),
+            "button_1": self.create_button("button_1.png", 540.0, 473.0, 387.0, 146.0, lambda: self.open_new_window(Interpolacion)),
+            "button_2": self.create_button("button_2.png", 540.0, 630.0, 387.0, 146.0, lambda: self.open_new_window(Ecuaciones_diferenciales)),
+            "button_3": self.create_button("button_3.png", 540.0, 7.0, 387.0, 146.0, lambda: self.open_new_window(Taylor)),
+            "button_4": self.create_button("button_4.png", 540.0, 161.0, 387.0, 146.0, lambda: self.open_new_window(Ceros)),
+            "button_5": self.create_button("button_5.png", 543.0, 317.0, 395.0, 146.0, lambda: self.open_new_window(Ecuaciones_lineales)),
         }
         return buttons
 
-    def open_new_window(self, object, nameAssets):
+    def open_new_window(self, object):
         new_window = tk.Toplevel(self.root)
-        object(new_window, assets_path=Path(Home.genera_assets_path + '/' + nameAssets))
+        object(new_window)
 
     def create_image(self, image_file: str, x: float, y: float) -> int:
         image = self.get_image(image_file)
