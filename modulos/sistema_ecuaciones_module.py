@@ -92,17 +92,16 @@ def eliminacion_gaussiana(A, b):
 
 
 def pivot(A, b):
-  A = A.astype(float)  # Convertir A a tipo float
-  b = b.astype(float)  # Convertir b a tipo float
+  A = A.astype(float)
+  b = b.astype(float)
   n = len(b)
 
   for k in range(n - 1):
     # Pivoteo parcial
     max_index = np.argmax(abs(A[k:n, k])) + k
     if A[max_index, k] == 0:
-      raise ValueError("Matrix is singular or nearly singular.")
+      raise ValueError("El método no converge a la solución del sistema.")
 
-    # Intercambiar filas
     if max_index != k:
       A[[k, max_index]] = A[[max_index, k]]
       b[[k, max_index]] = b[[max_index, k]]
@@ -112,8 +111,7 @@ def pivot(A, b):
       A[i, k:n] -= lam * A[k, k:n]
       b[i] -= lam * b[k]
 
-  x = np.zeros(n)  # Crear un arreglo de n cantidad de ceros
-  # Resolver las variables
+  x = np.zeros(n)
   for k in range(n - 1, -1, -1):
     x[k] = (b[k] - np.dot(A[k, k + 1:n], x[k + 1:n])) / A[k, k]
 

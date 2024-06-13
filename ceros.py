@@ -148,7 +148,7 @@ class Ceros:
 
         # parse the function string to a sympy expression
         x = sp.symbols("x")
-        f = sp.sympify(f_str)
+        f = sp.parsing.sympy_parser.parse_expr(f_str)
         f_lambda = sp.lambdify(x, f)
 
         # apply the bisection method
@@ -164,22 +164,23 @@ class Ceros:
         self.figure.clear()
 
         # prepare data
-        w = np.linspace(a - 5, a + 5, 100)
+        w = np.linspace(a - 5, b + 5, 100)
 
         # create axes
         axes = self.figure.add_subplot()
 
-        # create the plot
+        if root_biseccion != "No hay teorema":
+            # create the plot
 
-        axes.plot(w, f_lambda(w), label="Function")
-        axes.scatter([root_biseccion], [f_lambda(root_biseccion)], color='red')
-        axes.legend()
+            axes.plot(w, f_lambda(w), label="Function")
+            axes.scatter([root_biseccion], [f_lambda(root_biseccion)], color='red')
+            axes.legend()
 
-        axes.axhline(0, color='black', linewidth=0.5)
-        axes.axvline(0, color='black', linewidth=0.5)
+            axes.axhline(0, color='black', linewidth=0.5)
+            axes.axvline(0, color='black', linewidth=0.5)
 
-        # draw the graph
-        self.figure_canvas.draw()
+            # draw the graph
+            self.figure_canvas.draw()
 
         # update the polynomial label
         self.solution_label.config(text=str(root_biseccion))
@@ -199,7 +200,7 @@ class Ceros:
 
         # parse the function string to a sympy expression
         x = sp.symbols("x")
-        f = sp.sympify(f_str)
+        f = sp.parsing.sympy_parser.parse_expr(f_str)
 
         # apply the Newton's method
         tol = 1e-6  # tolerance
@@ -210,7 +211,7 @@ class Ceros:
 
         # prepare data
         F = sp.lambdify(x, f)
-        w = np.linspace(x0 - 5, x0 + 5, 100)
+        w = np.linspace(x0 - 20, x0 + 20, 100)
 
         # create axes
         axes = self.figure.add_subplot()
@@ -246,7 +247,7 @@ class Ceros:
 
         # parse the function string to a sympy expression
         x = sp.symbols("x")
-        f = sp.sympify(f_str)
+        f = sp.parsing.sympy_parser.parse_expr(f_str)
         f_lambda = sp.lambdify(x, f)
 
         # apply the false position method
@@ -257,18 +258,19 @@ class Ceros:
         self.figure.clear()
 
         # prepare data
-        w = np.linspace(a - 5, a + 5, 100)
+        w = np.linspace(a - 5, b + 5, 100)
 
-        # create axes
-        axes = self.figure.add_subplot()
+        if root_falsa_posicion != "No hay teorema":
+            # create axes
+            axes = self.figure.add_subplot()
 
-        # create the plot
-        axes.plot(w, f_lambda(w), label="Function")
-        axes.scatter([root_falsa_posicion], [f_lambda(root_falsa_posicion)], color='red')
-        axes.legend()
+            # create the plot
+            axes.plot(w, f_lambda(w), label="Function")
+            axes.scatter([root_falsa_posicion], [f_lambda(root_falsa_posicion)], color='red')
+            axes.legend()
 
-        axes.axhline(0, color='black', linewidth=0.5)
-        axes.axvline(0, color='black', linewidth=0.5)
+            axes.axhline(0, color='black', linewidth=0.5)
+            axes.axvline(0, color='black', linewidth=0.5)
 
         # draw the graph
         self.figure_canvas.draw()
@@ -293,7 +295,7 @@ class Ceros:
 
         # parse the function string to a sympy expression
         x = sp.symbols("x")
-        f = sp.sympify(f_str)
+        f = sp.parsing.sympy_parser.parse_expr(f_str)
         f_lambda = sp.lambdify(x, f)
 
         # apply the secant method
@@ -304,7 +306,7 @@ class Ceros:
         self.figure.clear()
 
         # prepare data
-        w = np.linspace(h0 - 5, h0 + 5, 100)
+        w = np.linspace(h0 - 5, h1 + 5, 100)
 
         # create axes
         axes = self.figure.add_subplot()

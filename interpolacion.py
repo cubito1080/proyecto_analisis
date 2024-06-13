@@ -120,6 +120,18 @@ class Interpolacion:
             self.images[image_file] = PhotoImage(file=self.relative_to_assets(image_file))
         return self.images[image_file]
 
+    def parseData(self, b_str):
+        # Remover espacios en blanco
+        b_str = b_str.replace(" ", "")
+
+        # Convertir el vector b
+        if b_str[0] != '[':
+            b_str = '[' + b_str + ']'
+        b_str = eval(b_str, {'__builtins__': None})
+        b = np.array(b_str)
+
+        return b
+
     def handlePolinomial(self):
         # get the values from the entries
         x_data_str = self.entries["entry_1"].get("1.0", "end-1c")
@@ -134,8 +146,8 @@ class Interpolacion:
             return
 
         # convert the entries to appropriate types
-        x_data = list(map(float, x_data_str.split(',')))
-        y_data = list(map(float, y_data_str.split(',')))
+        x_data = self.parseData(x_data_str)
+        y_data = self.parseData(y_data_str)
 
         x_data = np.array(x_data)
         y_data = np.array(y_data)
@@ -172,8 +184,8 @@ class Interpolacion:
             return
 
         # convert the entries to appropriate types
-        x_data = list(map(float, x_data_str.split(',')))
-        y_data = list(map(float, y_data_str.split(',')))
+        x_data = self.parseData(x_data_str)
+        y_data = self.parseData(y_data_str)
 
         x_data = np.array(x_data)
         y_data = np.array(y_data)
@@ -210,8 +222,8 @@ class Interpolacion:
             return
 
         # convert the entries to appropriate types
-        x_data = list(map(float, x_data_str.split(',')))
-        y_data = list(map(float, y_data_str.split(',')))
+        x_data = self.parseData(x_data_str)
+        y_data = self.parseData(y_data_str)
 
         x_data = np.array(x_data)
         y_data = np.array(y_data)

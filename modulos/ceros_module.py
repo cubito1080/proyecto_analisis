@@ -4,8 +4,7 @@ import sympy as sp
 
 def biseccion(f, a, b, tol):
     if (f(a) * f(b) > 0):
-        print("pailas")
-        return
+        return "No hay teorema"
 
     contador = 0
     while abs(a - b) > tol:
@@ -21,26 +20,18 @@ def biseccion(f, a, b, tol):
     return c
 
 
-def posicion_falsa(f, a, b, tol):
-    if f(a) * f(b) > 0:
-        print("pailas")
-        return
-
-    contador = 0
-    while True:
-        c = (a - f(a) * (a - b)) / (f(a) - f(b))
-
-        if abs(f(c)) <= tol:
-            break
-
-        if f(a) * f(c) < 0:
-            b = c
-        else:
-            a = c
-        contador += 1
-
-    print("Iteraciones posición falsa: ", contador)
-    return c
+def posicion_falsa(f,a,b,tol):
+  if (f(a)*f(b) < 0):
+    c = a - ((f(a)*(a-b))/(f(a)-f(b)))
+    while (np.abs(f(c))) > tol:
+      c = a - ((f(a)*(a-b))/(f(a)-f(b)))
+      if (f(a)*f(c) < 0):
+        b=c
+      else:
+        a=c
+  else:
+    return "No hay teorema"
+  return c
 
 
 

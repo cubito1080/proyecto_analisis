@@ -147,7 +147,7 @@ class Taylor:
         # prepare data
         P = sp.lambdify(x, taylor.P)
         F = sp.lambdify(x, f)
-        w = np.linspace(x0 - 5, x0 + 5, 100)
+        w = np.linspace(0,2, 100)
 
         # create axes
         axes = self.figure.add_subplot()

@@ -37,6 +37,9 @@ class Ecuaciones_diferenciales:
         # place the canvas on the right side of the window
         self.figure_canvas.get_tk_widget().place(x=445.0, y=380.0)
 
+        msg = "Si quieres evaluar una ecuación diferencial de segundo grado, por favor, introducela despejada en el campo Ecuación diferencial 2, y en Ecuación Diferencial 1 escribe 'x2'"
+        self.canvas.create_text(500, 33, anchor="nw", text=msg, fill="#000000", font=("InriaSans Regular", 11), width=400)
+
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
             self.root,
@@ -198,8 +201,8 @@ class Ecuaciones_diferenciales:
         axes = self.figure.add_subplot()
 
         # create the plot
-        axes.plot(t1, y1, label="Función 1")
-        axes.plot(t1, y2, label=f"Función 2")
+        axes.plot(t1, np.array(y)[:,0], label="Función 1")
+        axes.plot(t1, np.array(y)[:,1], label=f"Función 2")
         axes.legend()
         axes.grid()
 
@@ -242,6 +245,7 @@ class Ecuaciones_diferenciales:
 
     def create_text(self, x: float, y: float, text: str, font: str) -> None:
         self.canvas.create_text(x, y, anchor="nw", text=text, fill="#000000", font=(font, 20 * -1))
+
 
     def create_texts(self):
         self.create_text(81.00000000000003, 33.0, "Ecuaciones diferenciales", "InriaSans Regular")
