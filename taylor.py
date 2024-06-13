@@ -41,6 +41,7 @@ class Taylor:
         #text
         self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7")
         self.polinomio_label.place(x=440, y=570)
+        self.canvas.pack()
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
@@ -58,6 +59,7 @@ class Taylor:
     def create_button(self, image_file: str, x: float, y: float, width: float, height: float, command) -> Button:
         image = self.get_image(image_file)
         button = Button(
+            self.root,
             image=image,
             borderwidth=0,
             highlightthickness=0,
@@ -77,6 +79,7 @@ class Taylor:
         image = self.get_image(image_file)
         entry_bg = self.canvas.create_image(x, y, image=image)
         entry = Text(
+            self.root,
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
