@@ -20,7 +20,7 @@ def Gauss_s(A, b, tolerancia):
   radio = max(abs(lam))
 
   if radio >= 1:
-    print("El sistema iterativo no converge a la solución única del sistema")
+    raise Exception("El método no converge a la solución del sistema")
     return
 
   contador = 0
@@ -41,46 +41,37 @@ def Gauss_s(A, b, tolerancia):
 
   return xo[-1]
 
+def Gauss_s_sumas(A, b, tol=1e-2):
+    n = len(b)
+    xo = np.zeros(n)
+    x1 = np.zeros(n)
 
-# Gauss-Seidel sumatorias
-def Gauss_s_sumas(A, b, tol):
-  cont = 0
+    # Número máximo de iteraciones
+    M = 50
+    cont = 0
 
-  # Número máxima de iteraciones
-  M = 50
+    norm = float('inf')  # Inicializar la norma con un valor grande
 
-  norm = float('inf') # Aleatorio, mayor a la tolerancia
+    while norm > tol and cont < M:
+        for i in range(n):
+            aux = 0
+            for j in range(n):
+                if i != j:
+                    aux += A[i, j] * x1[j]  # Utilizar x1 actualizado
+            x1[i] = (b[i] - aux) / A[i, i]
 
-  n = len(b)
-  xo = np.zeros(n)
-  x1 = np.zeros(n)
+        norm = np.max(np.abs(x1 - xo))
+        xo = x1.copy()  # Actualizar xo con los nuevos valores de x1
+        cont += 1
 
-  x = [xo.copy()]
+    return x1
 
-  tiempo_inicial = time.time()
-  errores = []
-
-  while (norm > tol and cont < M):
-    for i in range(n):
-      aux = 0
-      for j in range(n):
-        if i != j:
-          aux = aux + A[i, j] * xo[j]
-        x1[i] = (b[i] - aux) / A[i, i]
-
-    norm = np.max(np.abs(x1 - xo))
-    errores.append(norm)
-    x.append(x1.copy())
-    xo = x1.copy()
-
-  tiempo_final = time.time()
-  duracion = tiempo_final - tiempo_inicial
-
-  return x1
 
 
 # Eliminación Gaussiana
 def eliminacion_gaussiana(A, b):
+  A = A.astype(float)  # Convertir A a tipo float
+  b = b.astype(float)  # Convertir b a tipo float
   n = len(b)
 
   for k in range(n-1):
@@ -101,6 +92,8 @@ def eliminacion_gaussiana(A, b):
 
 
 def pivot(A, b):
+  A = A.astype(float)  # Convertir A a tipo float
+  b = b.astype(float)  # Convertir b a tipo float
   n = len(b)
 
   for k in range(n - 1):

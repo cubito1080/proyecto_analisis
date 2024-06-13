@@ -4,7 +4,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
 import numpy as np
-
+import sympy as sp
 from modulos.sistema_ecuaciones_module import Gauss_s, pivot
 from modulos.sistema_ecuaciones_module import Gauss_s_sumas
 from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
@@ -27,8 +27,12 @@ class Ecuaciones_lineales:
         self.canvas_images = self.create_images()
 
         # text
-        self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7")
-        self.polinomio_label.place(x=210, y=645)
+        self.polinomio_label = tk.Label(self.root, text="", bg="#FFC7C7", font=("InriaSans Regular", 14))
+        self.polinomio_label.place(x=250, y=645)
+
+        # Excepciones
+        self.error_label = tk.Label(self.root, text="", bg="#FFC7C7", font=("InriaSans Regular", 14))
+        self.error_label.place(x=210, y=720)
 
     def create_canvas(self) -> Canvas:
         canvas = Canvas(
@@ -56,19 +60,28 @@ class Ecuaciones_lineales:
         return button
 
     def parseData(self, A_str, b_str):
-        if A_str[0] != '[':
-            A_str = '[' + A_str + ']'
-        A_str = ast.literal_eval(A_str)  # Turn string into a list
-        A = np.array(A_str)  # Turn list into np_array
+        # Remover espacios en blanco
+        A_str = A_str.replace(" ", "")
+        b_str = b_str.replace(" ", "")
 
+        # Evaluar y convertir la matriz A
+        if A_str[:2] != '[[':
+            A_str = '[' + A_str + ']'
+
+        # Evaluar las expresiones numéricas usando sympify
+        A_eval = eval(A_str, {'__builtins__': None}, {'sympify': sp.sympify})
+        A = np.array([[float(sp.sympify(val)) for val in row] for row in A_eval])
+
+        # Convertir el vector b
         if b_str[0] != '[':
             b_str = '[' + b_str + ']'
-        b_str = ast.literal_eval(b_str)  # Turn string into a list
-        b = np.array(b_str)  # Turn list into np_array
+        b_str = eval(b_str, {'__builtins__': None})
+        b = np.array(b_str)
 
         return A, b
 
     def handleEliminacion(self):
+        self.error_label.config(text="")
         A_str = self.entries["entry_1"].get("1.0", "end-1c")
         b_str = self.entries["entry_2"].get("1.0", "end-1c")
 
@@ -86,6 +99,7 @@ class Ecuaciones_lineales:
         print(result)
 
     def handlePivoteo(self):
+        self.error_label.config(text="")
         A_str = self.entries["entry_1"].get("1.0", "end-1c")
         b_str = self.entries["entry_2"].get("1.0", "end-1c")
 
@@ -103,6 +117,7 @@ class Ecuaciones_lineales:
         print(result)
 
     def handleGsMatricial(self):
+        self.error_label.config(text="")
         A_str = self.entries["entry_1"].get("1.0", "end-1c")
         b_str = self.entries["entry_2"].get("1.0", "end-1c")
 
@@ -114,13 +129,15 @@ class Ecuaciones_lineales:
         A, b = self.parseData(A_str, b_str)
 
         tol = 1e-3
-        result = Gauss_s(A, b, tol)
+        try:
+            result = Gauss_s(A, b, tol)
 
-        self.polinomio_label.config(text=str(result))
-
-        print(result)
+            self.polinomio_label.config(text=str(result))
+        except:
+            self.error_label.config(text="El método no converge a la solución del sistema")
 
     def handleGsSumas(self):
+        self.error_label.config(text="")
         A_str = self.entries["entry_1"].get("1.0", "end-1c")
         b_str = self.entries["entry_2"].get("1.0", "end-1c")
 
@@ -131,13 +148,13 @@ class Ecuaciones_lineales:
 
         A, b = self.parseData(A_str, b_str)
 
-        tol = 1e-3
-        result = Gauss_s_sumas(A, b, tol)
+        try:
+            result = Gauss_s_sumas(A, b)
 
-        self.polinomio_label.config(text=str(result))
+            self.polinomio_label.config(text=str(result))
+        except:
+            self.error_label.config(text="El método no converge a la solución del sistema")
 
-
-        print(result)
 
     def create_buttons(self):
         buttons = {
@@ -178,6 +195,8 @@ class Ecuaciones_lineales:
         self.create_text(62.0, 627.0, "solucion:", "InriaSans Regular")
         self.create_text(727.0, 38.0, "-Metodos directos:", "InriaSans Regular")
         self.create_text(712.0, 416.0, "-Metodos iterativos:", "InriaSans Regular")
+
+        self.create_text(712.0, 416.0, "", "InriaSans Regular")
 
     def create_image(self, image_file: str, x: float, y: float) -> int:
         image = self.get_image(image_file)
