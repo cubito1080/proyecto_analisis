@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -10,9 +11,11 @@ from modulos.interpolacion_module import  Poly, Pol_simple_2, minimos_cuadrados,
 
 
 class Interpolacion:
-    def __init__(self, root: Tk, assets_path: Path):
-        self.root = root
-        self.assets_path = assets_path
+    def __init__(self):
+        self.root = Tk()
+        self.assets_path = Path(os.getcwd()) / "assets/interpolacion_assets"
+
+
         self.root.geometry("1080x780")
         self.root.configure(bg="#FFC7C7")
         self.canvas = self.create_canvas()
@@ -243,8 +246,5 @@ class Interpolacion:
 
 
 if __name__ == "__main__":
-    OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\interpolacion_assets")
-    root = Tk()
-    app = Interpolacion(root, ASSETS_PATH)
+    app = Interpolacion()
     app.run()

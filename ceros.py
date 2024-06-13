@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 from typing import Callable, Dict
@@ -11,10 +12,12 @@ from modulos.ceros_module import posicion_falsa
 from modulos.ceros_module import secante
 import tkinter as tk
 
+
 class Ceros:
-    def __init__(self, root: Tk, assets_path: Path):
-        self.root = root
-        self.assets_path = assets_path
+    def __init__(self):
+        self.root = Tk()
+        self.assets_path = Path(os.getcwd()) / "assets/Ceros_assets"
+
         self.root.geometry("1080x780")
         self.root.configure(bg="#FFC7C7")
         self.canvas = self.create_canvas()
@@ -82,7 +85,7 @@ class Ceros:
             fg="#000716",
             highlightthickness=0
         )
-        entry.place(x=x-width/2, y=y-height/2, width=width, height=height)
+        entry.place(x=x - width / 2, y=y - height / 2, width=width, height=height)
         return entry
 
     def create_entries(self):
@@ -102,11 +105,9 @@ class Ceros:
         self.create_text(115.0, 114.0, "Funcion:", "InriaSans Regular")
         self.create_text(115.0, 286.0, "Punto b:", "InriaSans Regular")
 
-
     def create_image(self, image_file: str, x: float, y: float) -> int:
         image = self.get_image(image_file)
         return self.canvas.create_image(x, y, image=image)
-
 
     def create_images(self) -> Dict[str, int]:
         images = {
@@ -326,8 +327,5 @@ class Ceros:
 
 
 if __name__ == "__main__":
-    OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\Ceros_assets")
-    root = Tk()
-    app = Ceros(root, ASSETS_PATH)
+    app = Ceros()
     app.run()

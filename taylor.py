@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
@@ -13,9 +14,10 @@ from modulos.taylor_module import TaylorSeries
 
 
 class Taylor:
-    def __init__(self, root: Tk, assets_path: Path):
-        self.root = root
-        self.assets_path = assets_path
+    def __init__(self):
+        self.root = Tk()
+        self.assets_path = Path(os.getcwd()) / "assets/taylor_assets"
+
         self.root.geometry("1080x780")
         self.root.configure(bg="#FFC7C7")
         self.canvas = self.create_canvas()
@@ -164,8 +166,6 @@ class Taylor:
 
 
 if __name__ == "__main__":
-    OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\taylor_assets")
-    root = Tk()
-    app = Taylor(root, ASSETS_PATH)
+
+    app = Taylor()
     app.run()

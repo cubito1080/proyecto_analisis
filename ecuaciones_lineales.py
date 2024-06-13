@@ -1,4 +1,5 @@
 import ast
+import os
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Label
 
@@ -10,9 +11,12 @@ from modulos.sistema_ecuaciones_module import eliminacion_gaussiana
 import tkinter as tk
 
 class Ecuaciones_lineales:
-    def __init__(self, root: Tk, assets_path: Path):
-        self.root = root
-        self.assets_path = assets_path
+    def __init__(self):
+        self.root = Tk()
+        self.assets_path = Path(os.getcwd()) / "assets/ecuaciones_lineales_assets"
+
+
+
         self.root.geometry("1080x780")
         self.root.configure(bg="#FFC7C7")
         self.canvas = self.create_canvas()
@@ -206,8 +210,5 @@ class Ecuaciones_lineales:
 
 
 if __name__ == "__main__":
-    OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\ecuaciones_lineales_assets")
-    root = Tk()
-    app = Ecuaciones_lineales(root, ASSETS_PATH)
+    app = Ecuaciones_lineales()
     app.run()
