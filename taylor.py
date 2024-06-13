@@ -57,6 +57,7 @@ class Taylor:
     def create_button(self, image_file: str, x: float, y: float, width: float, height: float, command) -> Button:
         image = self.get_image(image_file)
         button = Button(
+            self.root,
             image=image,
             borderwidth=0,
             highlightthickness=0,
@@ -76,6 +77,7 @@ class Taylor:
         image = self.get_image(image_file)
         entry_bg = self.canvas.create_image(x, y, image=image)
         entry = Text(
+            self.root,
             bd=0,
             bg="#FFFFFF",
             fg="#000716",
