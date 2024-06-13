@@ -244,7 +244,9 @@ class Interpolacion:
 
 if __name__ == "__main__":
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_analisis\assets\interpolacion_assets")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"D:\Users\Wilson\Proyectos\proyecto_a"
+                                     r""
+                                     r"nalisis\assets\interpolacion_assets")
     root = Tk()
     app = Interpolacion(root, ASSETS_PATH)
     app.run()
